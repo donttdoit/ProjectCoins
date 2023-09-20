@@ -92,13 +92,13 @@ public class CoinSpawner : MonoBehaviour
         }
 
         Vector2 resultVector = curruntPosition;
-        resultVector += sumCoinVector.normalized * () + sumObstacleVector;
+        resultVector += -sumCoinVector.normalized * _distanceBetween + (-sumObstacleVector).normalized * _distanceToObstacles;
 
-        float distanceToCenter = (_spawnZone.Center - resultVector).magnitude;
-        if (distanceToCenter < _distanceToCenter)
-            resultVector
+        Vector2 centerVector = _spawnZone.Center - resultVector;
+        if (centerVector.magnitude < _distanceToCenter)
+            resultVector += -centerVector.normalized * _distanceToCenter;
 
-        
+        return resultVector;
     }
 
     //private Vector2 GetRandomPosition(Vector2[] obstaclePositions)
