@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -32,8 +30,9 @@ public class InputHandler : MonoBehaviour
     public Vector2 GetMovementVectorNormalized() => _input.PlayerHandler.Movement.ReadValue<Vector2>().normalized;
 
     public Vector2 GetMousePosition() => Mouse.current.position.ReadValue();
+    public Vector2 GetWorldMousePosition() => Camera.main.ScreenToWorldPoint(GetMousePosition());
 
-    public bool IsMouseLeftButtonPressed() => Mouse.current.leftButton.wasPressedThisFrame;
+    public bool IsMouseLeftButtonPressed() => Mouse.current.leftButton.isPressed;
 
     private void Interact(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {

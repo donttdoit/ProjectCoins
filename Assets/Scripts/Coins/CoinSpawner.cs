@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -17,6 +16,11 @@ public class CoinSpawner : MonoBehaviour
 
     [Inject]
     private void Construct(CoinFactory coinFactory) => _coinFactory = coinFactory;
+
+    private void Awake()
+    {
+        StartWork();
+    }
 
     public void StartWork()
     {

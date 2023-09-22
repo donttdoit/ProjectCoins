@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.InputSystem;
 using Zenject;
 
 public class Player : MonoBehaviour
@@ -26,11 +21,13 @@ public class Player : MonoBehaviour
         //_navMeshAgent.updateUpAxis = false;
     }
 
+
     private void FixedUpdate()
     {
-        //if (_inputHandler.IsMouseLeftButtonPressed())
-        //    MovementMouseHandler();
-        MovementKeyboardHandler();
+        if (_inputHandler.IsMouseLeftButtonPressed())
+            MovementMouseHandler();
+        else
+            MovementKeyboardHandler();
     }
 
     private void MovementKeyboardHandler()
@@ -46,8 +43,11 @@ public class Player : MonoBehaviour
 
     private void MovementMouseHandler()
     {
-        Vector2 mousePosition = _inputHandler.GetMousePosition();
-        Debug.Log(_inputHandler.GetMousePosition());
+        Vector2 mousePosition = _inputHandler.GetWorldMousePosition();
+        Vector2 direction = (mousePosition - new Vector2(transform.position.x, transform.position.y)).normalized;
+        _rigidBody.MovePosition(_rigidBody.position + direction * _speed * Time.deltaTime);
+        if (direction != Vector2.zero)
+            transform.up = direction;
         //_navMeshAgent.SetDestination(new Vector3(mousePosition.x, mousePosition.y, 0));
     }
 }
