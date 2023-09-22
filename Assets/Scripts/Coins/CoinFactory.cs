@@ -1,21 +1,39 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using Zenject;
 
-[CreateAssetMenu(fileName = "CoinFactory", menuName = "Factory/CoinFactory")]
-public class CoinFactory : ScriptableObject
+public class CoinFactory
 {
-    [SerializeField] private CoinConfig _smallCoin, _largeCoin;
+    private const string FactoryConfig = "FactoryConfig";
+    private const string ConfigPath = "Configs";
+    private CoinConfig _smallCoin, _largeCoin;
+    private DiContainer _container;
+
+    public CoinFactory(DiContainer container) 
+    {
+        _container = container;
+        Load();
+    }
 
     public Coin Get(CoinType type)
     {
         CoinConfig config = GetConfig(type);
-        Coin coin = Instantiate(config.Prefab);
-        coin.Initialize(config.Value);
+        Coin coin = _container.InstantiatePrefabForComponent<Coin>(config.Prefab);
+        coin.Initialize(config.Award);
 
         return coin;
     }
+
+    private void Load()
+    {
+        _smallCoin = Resources.Load<FactoryConfig>(Path.Combine(ConfigPath, FactoryConfig)).SmallCoin;
+        _largeCoin = Resources.Load<FactoryConfig>(Path.Combine(ConfigPath, FactoryConfig)).LargeCoin;
+    }
+
+
 
     private CoinConfig GetConfig(CoinType type)
     {

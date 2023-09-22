@@ -8,12 +8,15 @@ public class SpawnZone : MonoBehaviour
     private Vector2 _leftCorner;
     private Vector2 _rightCorner;
     private Vector2 _center;
+    private Vector2 _size;
 
     private BoxCollider2D _boxCollider;
 
     public Vector2 LeftCorner => _leftCorner;
     public Vector2 RightCorner => _rightCorner;
     public Vector2 Center => _center;
+
+    public Vector2 Size => _size;
 
     private void Awake()
     {
@@ -30,6 +33,8 @@ public class SpawnZone : MonoBehaviour
                                    _boxCollider.bounds.center.y - _boxCollider.bounds.extents.y);
 
         _center = _boxCollider.bounds.center;
+
+        _size = _boxCollider.bounds.size;
     }
 
 }

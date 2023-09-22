@@ -7,8 +7,8 @@ using UnityEngine;
 public class CoinConfig
 {
     [SerializeField] private Coin _prefab;
-    [SerializeField] private float _value;
+    [SerializeField] private int _award;
 
     public Coin Prefab => _prefab;
-    public float Value => _value;
+    public int Award => _award;
 }
