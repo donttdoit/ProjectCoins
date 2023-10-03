@@ -1,26 +1,23 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Zenject;
 
-public class InputHandler : MonoBehaviour
+public class InputHandler : IInitializable, IDisposable
 {
     public event Action Interacted;
     public event Action CancelInteracted;
     private PlayerInput _input;
 
-    private void Awake()
+    public void Initialize()
     {
         _input = new PlayerInput();
-    }
-
-    private void OnEnable()
-    {
         _input.Enable();
         _input.PlayerHandler.Interact.performed += Interact;
         _input.PlayerHandler.Interact.canceled += CancelInteract;
     }
-    
-    private void OnDisable()
+
+    public void Dispose()
     {
         _input.Disable();
         _input.PlayerHandler.Interact.performed -= Interact;
@@ -44,6 +41,5 @@ public class InputHandler : MonoBehaviour
         CancelInteracted?.Invoke();
     }
 
-
-
+    
 }
