@@ -8,20 +8,14 @@ using Zenject;
 public class GameLevelInstaller : MonoInstaller
 {
     [SerializeField] private CinemachineVirtualCameraBase _CinemachineCamera;
+    [SerializeField] private CoordinateViewer _coordinateViewer;
     [SerializeField] private Player _playerPrefab;
     [SerializeField] private Transform _playerSpawnPositon;
-    [SerializeField] private PlayerConfig _playerConfig;
 
     public override void InstallBindings()
     {
-        //BindConfigs();
         BinsInstances();
-        BindCoinSpawner(); 
-    }
-
-    private void BindConfigs()
-    {
-        Container.BindInstance(_playerConfig);
+        BindCoinFactory(); 
     }
 
     private void BinsInstances()
@@ -29,9 +23,10 @@ public class GameLevelInstaller : MonoInstaller
         Player player = Container.InstantiatePrefabForComponent<Player>(_playerPrefab, _playerSpawnPositon.position, Quaternion.identity, null);
         Container.BindInstance(player);
         _CinemachineCamera.Follow = player.transform;
+        _coordinateViewer.SetSourceTransform(player.transform);
     }
 
-    private void BindCoinSpawner()
+    private void BindCoinFactory()
     {
         Container.Bind<CoinFactory>().AsSingle();
     }
