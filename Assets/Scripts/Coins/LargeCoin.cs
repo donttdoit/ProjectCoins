@@ -1,7 +1,10 @@
+using TMPro;
+using UnityEngine;
 using Zenject;
 
 public class LargeCoin : Coin
 {
+    [SerializeField] private TMP_Text _interactText;
     private InputHandler _inputHandler;
 
     [Inject]
@@ -12,6 +15,7 @@ public class LargeCoin : Coin
     {
         _inputHandler.Interacted += Interacting;
         _inputHandler.CancelInteracted += StopInteracting;
+        _interactText.text = "";
     }
 
     private void OnDisable()
@@ -20,8 +24,15 @@ public class LargeCoin : Coin
         _inputHandler.CancelInteracted -= StopInteracting;
     }
 
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        IsTriggered = false;
+        _interactText.text = "";
+    }
+
     protected override void PickingCoin()
     {
+        _interactText.text = $"Взаимодействие {_inputHandler.InteractKey}";
         if (IsInteracted == true)
         {
             Wallet.AddCoins(Value);
