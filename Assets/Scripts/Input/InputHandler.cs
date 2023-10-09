@@ -7,6 +7,7 @@ public class InputHandler : IInitializable, IDisposable
 {
     public event Action Interacted;
     public event Action CancelInteracted;
+    public event Action EscPressed;
     private PlayerInput _input;
 
     public void Initialize()
@@ -15,6 +16,7 @@ public class InputHandler : IInitializable, IDisposable
         _input.Enable();
         _input.PlayerHandler.Interact.performed += Interact;
         _input.PlayerHandler.Interact.canceled += CancelInteract;
+        _input.PlayerHandler.Pause.performed += EscPress;
     }
 
     public void Dispose()
@@ -22,6 +24,7 @@ public class InputHandler : IInitializable, IDisposable
         _input.Disable();
         _input.PlayerHandler.Interact.performed -= Interact;
         _input.PlayerHandler.Interact.canceled -= CancelInteract;
+        _input.PlayerHandler.Pause.performed += EscPress;
     }
 
     public Vector2 GetMovementVectorNormalized() => _input.PlayerHandler.Movement.ReadValue<Vector2>().normalized;
@@ -31,15 +34,12 @@ public class InputHandler : IInitializable, IDisposable
 
     public bool IsMouseLeftButtonPressed() => Mouse.current.leftButton.isPressed;
 
-    private void Interact(UnityEngine.InputSystem.InputAction.CallbackContext context)
-    {
-        Interacted?.Invoke();
-    }
+    private void Interact(InputAction.CallbackContext context)
+        => Interacted?.Invoke();
 
-    private void CancelInteract(UnityEngine.InputSystem.InputAction.CallbackContext context)
-    {
-        CancelInteracted?.Invoke();
-    }
+    private void CancelInteract(InputAction.CallbackContext context)
+        => CancelInteracted?.Invoke();
+    private void EscPress(InputAction.CallbackContext context) 
+        => EscPressed?.Invoke();
 
-    
 }
