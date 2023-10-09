@@ -10,14 +10,15 @@ public class MenuPanel : MonoBehaviour
     [SerializeField] private Button _playButton;
     [SerializeField] private Button _settingsButton;
     [SerializeField] private Button _exitButton;
-    [SerializeField] private Settings _settingsPanel;
-
+    
+    private Settings _settingsPanel;
     private SceneLoader _sceneLoader;
 
     [Inject]
-    private void Construct(SceneLoader sceneLoader)
+    private void Construct(SceneLoader sceneLoader, Settings settinsPanel)
     {
         _sceneLoader = sceneLoader;
+        _settingsPanel = settinsPanel;
     }
 
     private void OnEnable()
@@ -36,7 +37,7 @@ public class MenuPanel : MonoBehaviour
 
     private void OnExitClicked() => Application.Quit();
 
-    private void OnSettingsClicked() => _settingsPanel.gameObject.SetActive(true);
+    private void OnSettingsClicked() => _settingsPanel.Show(true);
 
     private void OnPlayClicked() => _sceneLoader.Load(SceneID.GameplayScene);
 
