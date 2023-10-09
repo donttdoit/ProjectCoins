@@ -10,6 +10,7 @@ public class Player : MonoBehaviour, IMover
     public event Action MouseExitMover;
 
     private IMovementHandler _movementHandler;
+    private LevelLoadingData _levelData;
     private InputHandler _inputHandler;
     private Rigidbody2D _rigidBody;
     private Collider2D _collider;
@@ -20,13 +21,29 @@ public class Player : MonoBehaviour, IMover
     public Collider2D Collider => _collider;
 
     [Inject]
-    private void Construct(InputHandler inputHandler) => _inputHandler = inputHandler;
+    private void Construct(InputHandler inputHandler, LevelLoadingData levelData)
+    {
+        _inputHandler = inputHandler;
+        _levelData = levelData;
+    }
 
     private void Awake()
     {
-        //_movementHandler = new MouseMovePattern(_inputHandler, this);
-        //_movementHandler = new KeyboardMovePattern(_inputHandler, this);
-        _movementHandler = new MouseKeyboardMovePattern(_inputHandler, this);
+        switch (_levelData.Movement)
+        {
+            case Movement.KeyboardMovement:
+                _movementHandler = new KeyboardMovePattern(_inputHandler, this);
+                break;
+
+            case Movement.MouseMovement:
+                _movementHandler = new MouseMovePattern(_inputHandler, this);
+                break;
+
+            default:
+            case Movement.MouseKeyboardMovement:
+                _movementHandler = new MouseKeyboardMovePattern(_inputHandler, this);
+                break;
+        }
         _rigidBody = GetComponent<Rigidbody2D>();
         _collider = GetComponent<Collider2D>();
     }
