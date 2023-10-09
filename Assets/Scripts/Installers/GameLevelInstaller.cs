@@ -12,13 +12,25 @@ public class GameLevelInstaller : MonoInstaller
     [SerializeField] private Player _playerPrefab;
     [SerializeField] private Transform _playerSpawnPositon;
 
+    private LevelLoadingData _levelLoadingData;
+
+    [Inject]
+    private void Construct(LevelLoadingData levelLoadingData)
+        => _levelLoadingData = levelLoadingData;
+
     public override void InstallBindings()
     {
-        BinsInstances();
+        BindLevelLoadingData();
+        BindInstances();
         BindCoinFactory(); 
     }
 
-    private void BinsInstances()
+    private void BindLevelLoadingData()
+    {
+        Container.BindInstance(_levelLoadingData).AsSingle();
+    }
+
+    private void BindInstances()
     {
         Player player = Container.InstantiatePrefabForComponent<Player>(_playerPrefab, _playerSpawnPositon.position, Quaternion.identity, null);
         Container.BindInstance(player);

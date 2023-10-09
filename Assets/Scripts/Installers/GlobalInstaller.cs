@@ -7,6 +7,13 @@ public class GlobalInstaller : MonoInstaller
     {
         BindInput();
         BindResources();
+        BindSceneLoader();
+    }
+
+    private void BindSceneLoader()
+    {
+        Container.BindInstance(new LevelLoadingData(Movement.MouseKeyboardMovement)).AsSingle();
+        Container.Bind<SceneLoader>().AsSingle();
     }
 
     private void BindInput()
