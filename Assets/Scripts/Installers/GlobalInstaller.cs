@@ -23,6 +23,7 @@ public class GlobalInstaller : MonoInstaller
 
     private void BindResources()
     {   
-        Container.BindInstance(new Wallet());
+        Container.BindInstance(new Wallet()).AsSingle();
+        Container.BindInterfacesAndSelfTo<PauseHandler>().AsSingle();
     }
 }
