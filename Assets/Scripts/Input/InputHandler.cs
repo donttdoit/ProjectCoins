@@ -8,7 +8,11 @@ public class InputHandler : IInitializable, IDisposable
     public event Action Interacted;
     public event Action CancelInteracted;
     public event Action EscPressed;
+    public event Action ShiftPressed;
+    public event Action CancelShiftPressed;
     private PlayerInput _input;
+
+    public string InteractKey => _input.PlayerHandler.Interact.bindings[0].ToDisplayString();
 
     public void Initialize()
     {
@@ -16,7 +20,9 @@ public class InputHandler : IInitializable, IDisposable
         _input.Enable();
         _input.PlayerHandler.Interact.performed += Interact;
         _input.PlayerHandler.Interact.canceled += CancelInteract;
-        _input.PlayerHandler.Pause.performed += EscPress;
+        _input.PlayerHandler.Pause.started += EscPress;
+        _input.PlayerHandler.SpeedUp.performed += ShiftPress;
+        _input.PlayerHandler.SpeedUp.canceled += CancelShiftPress;
     }
 
     public void Dispose()
@@ -24,7 +30,9 @@ public class InputHandler : IInitializable, IDisposable
         _input.Disable();
         _input.PlayerHandler.Interact.performed -= Interact;
         _input.PlayerHandler.Interact.canceled -= CancelInteract;
-        _input.PlayerHandler.Pause.performed += EscPress;
+        _input.PlayerHandler.Pause.started -= EscPress;
+        _input.PlayerHandler.SpeedUp.performed -= ShiftPress;
+        _input.PlayerHandler.SpeedUp.canceled -= CancelShiftPress;
     }
 
     public Vector2 GetMovementVectorNormalized() => _input.PlayerHandler.Movement.ReadValue<Vector2>().normalized;
@@ -41,5 +49,8 @@ public class InputHandler : IInitializable, IDisposable
         => CancelInteracted?.Invoke();
     private void EscPress(InputAction.CallbackContext context) 
         => EscPressed?.Invoke();
-
+    private void ShiftPress(InputAction.CallbackContext context)
+        => ShiftPressed?.Invoke();
+    private void CancelShiftPress(InputAction.CallbackContext context)
+        => CancelShiftPressed?.Invoke();
 }

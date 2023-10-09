@@ -53,6 +53,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpeedUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""89ebe08f-6090-49d2-b3f1-11d97ea6b6df"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -132,6 +141,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""04924811-1f90-42ef-adb2-4eae01b17244"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpeedUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -143,6 +163,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_PlayerHandler_Movement = m_PlayerHandler.FindAction("Movement", throwIfNotFound: true);
         m_PlayerHandler_Interact = m_PlayerHandler.FindAction("Interact", throwIfNotFound: true);
         m_PlayerHandler_Pause = m_PlayerHandler.FindAction("Pause", throwIfNotFound: true);
+        m_PlayerHandler_SpeedUp = m_PlayerHandler.FindAction("SpeedUp", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -205,6 +226,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerHandler_Movement;
     private readonly InputAction m_PlayerHandler_Interact;
     private readonly InputAction m_PlayerHandler_Pause;
+    private readonly InputAction m_PlayerHandler_SpeedUp;
     public struct PlayerHandlerActions
     {
         private @PlayerInput m_Wrapper;
@@ -212,6 +234,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_PlayerHandler_Movement;
         public InputAction @Interact => m_Wrapper.m_PlayerHandler_Interact;
         public InputAction @Pause => m_Wrapper.m_PlayerHandler_Pause;
+        public InputAction @SpeedUp => m_Wrapper.m_PlayerHandler_SpeedUp;
         public InputActionMap Get() { return m_Wrapper.m_PlayerHandler; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -230,6 +253,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Pause.started -= m_Wrapper.m_PlayerHandlerActionsCallbackInterface.OnPause;
                 @Pause.performed -= m_Wrapper.m_PlayerHandlerActionsCallbackInterface.OnPause;
                 @Pause.canceled -= m_Wrapper.m_PlayerHandlerActionsCallbackInterface.OnPause;
+                @SpeedUp.started -= m_Wrapper.m_PlayerHandlerActionsCallbackInterface.OnSpeedUp;
+                @SpeedUp.performed -= m_Wrapper.m_PlayerHandlerActionsCallbackInterface.OnSpeedUp;
+                @SpeedUp.canceled -= m_Wrapper.m_PlayerHandlerActionsCallbackInterface.OnSpeedUp;
             }
             m_Wrapper.m_PlayerHandlerActionsCallbackInterface = instance;
             if (instance != null)
@@ -243,6 +269,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @SpeedUp.started += instance.OnSpeedUp;
+                @SpeedUp.performed += instance.OnSpeedUp;
+                @SpeedUp.canceled += instance.OnSpeedUp;
             }
         }
     }
@@ -252,5 +281,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnSpeedUp(InputAction.CallbackContext context);
     }
 }
